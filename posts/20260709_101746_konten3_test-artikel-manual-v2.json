@@ -1,0 +1,12 @@
+{
+  "video_id": "dQw4w9WgXcQ",
+  "title": "Test Artikel Manual v2",
+  "topic": "Testing workflow manual post blog dengan error logging",
+  "channel": "konten3",
+  "ts": "20260709_101746",
+  "article": {
+    "title": "Test Artikel Manual v2",
+    "content": "<p>Article generation failed: HTTP Error 403: Forbidden</p>"
+  },
+  "slug": "test-artikel-manual-v2"
+}
