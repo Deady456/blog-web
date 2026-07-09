@@ -42,5 +42,14 @@ h1 span{color:#e94560}
 .pagination a{padding:10px 20px;background:#1a1a2e;color:#e0e0e0;text-decoration:none;border-radius:8px;border:1px solid rgba(255,255,255,0.08);transition:all .2s;font-size:0.9em}
 .pagination a:hover{background:#e94560;color:#fff;border-color:#e94560}
 .pagination span{color:#6b6b80;font-size:0.9em}
+.dropdown{position:relative;display:inline-block}
+.dropbtn{cursor:pointer;color:#a0a0b8;text-decoration:none;font-size:0.9em;transition:color .2s;background:none;border:none;padding:0;font-family:inherit}
+.dropbtn:hover{color:#e94560}
+.dropdown-content{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);background:#1a1a2e;min-width:140px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);padding:6px;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
+.dropdown-content a{display:block;padding:8px 14px;color:#c0c0d0;text-decoration:none;font-size:0.85em;border-radius:6px;transition:all .15s}
+.dropdown-content a:hover{background:rgba(233,69,96,0.15);color:#e94560}
+.dropdown:hover .dropdown-content{display:block}
+.post-meta .channel{background:rgba(233,69,96,0.15);color:#e94560;padding:2px 8px;border-radius:4px;font-size:0.85em;text-decoration:none;transition:background .2s}
+.post-meta a.channel:hover{background:rgba(233,69,96,0.3)}
 .footer{border-top:1px solid rgba(255,255,255,0.05);text-align:center;padding:30px 0;color:#555;font-size:0.85em}
 @media(max-width:640px){.post-grid{grid-template-columns:1fr}.post-full{padding:20px}.post-full h1{font-size:1.5em}.video-embed iframe{height:220px}.nav-inner{flex-direction:column;gap:10px}}
