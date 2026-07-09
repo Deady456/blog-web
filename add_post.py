@@ -40,8 +40,9 @@ def expand_article(data: dict) -> dict:
     )
     try:
         return json.loads(call_llm(prompt))
-    except Exception:
-        return {"title": title, "content": "<p>Article generation failed.</p>"}
+    except Exception as e:
+        print(f"GROQ ERROR: {e}", file=sys.stderr)
+        return {"title": title, "content": f"<p>Article generation failed: {e}</p>"}
 
 
 def slugify(text: str) -> str:
