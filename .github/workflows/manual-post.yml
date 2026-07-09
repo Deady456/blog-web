@@ -28,6 +28,9 @@ on:
           - konten6
           - rak_anime
 
+permissions:
+  contents: write
+
 jobs:
   post:
     runs-on: ubuntu-latest
