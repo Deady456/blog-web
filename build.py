@@ -96,10 +96,6 @@ def main():
     (OUT_DIR / "post").mkdir(parents=True)
     shutil.copytree(ASSETS_SRC, ASSETS_DST)
 
-    _redirects = Path(__file__).parent / "_redirects"
-    if _redirects.exists():
-        shutil.copy(_redirects, OUT_DIR / "_redirects")
-
     posts = load_posts()
     print(f"Building {len(posts)} posts...")
     build_index(posts)
