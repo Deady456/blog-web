@@ -1,0 +1,62 @@
+name: Manual Blog Post
+
+on:
+  workflow_dispatch:
+    inputs:
+      video_id:
+        description: YouTube video ID
+        required: true
+        type: string
+      title:
+        description: Video title
+        required: true
+        type: string
+      topic:
+        description: Video topic / deskripsi
+        required: true
+        type: string
+      channel:
+        description: Channel name
+        required: true
+        type: choice
+        options:
+          - konten-1
+          - konten-2
+          - konten3
+          - konten4
+          - konten5
+          - konten6
+          - rak_anime
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Generate blog post
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          TS=$(date -u +"%Y%m%d_%H%M%S")
+          jq -cn \
+            --arg vid "${{ inputs.video_id }}" \
+            --arg title "${{ inputs.title }}" \
+            --arg topic "${{ inputs.topic }}" \
+            --arg ch "${{ inputs.channel }}" \
+            --arg ts "$TS" \
+            '{video_id:$vid, title:$title, topic:$topic, channel:$ch, ts:$ts}' \
+            | python add_post.py
+      - name: Commit & push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add posts/
+          if git diff --staged --quiet; then
+            echo "no changes"
+          else
+            git commit -m "manual: post from ${{ inputs.channel }}"
+            git push
+          fi
