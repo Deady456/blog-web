@@ -17,28 +17,29 @@ jobs:
         with:
           python-version: "3.10"
       - name: Pick random channel & generate post
+        id: generate
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
           CHANNELS=(konten-1 konten-2 konten3 konten4 konten5 konten6 rak_anime)
           CH=${CHANNELS[$RANDOM % ${#CHANNELS[@]}]}
           echo "Picked: $CH"
+          echo "channel=$CH" >> $GITHUB_OUTPUT
           TS=$(date -u +"%Y%m%d_%H%M%S")
           STATE_URL="https://raw.githubusercontent.com/Deady456/${CH}/main/state.json"
           JSON=$(curl -sSf "$STATE_URL" 2>/dev/null | jq -c '{video_id:(.published[-1].video_id//""), title:(.published[-1].title//""), topic:(.published[-1].topic//""), channel:"'${CH}'", ts:"'${TS}'"}')
           if [ -z "$JSON" ] || [ "$JSON" = "null" ]; then
             echo "state.json empty, skipping"
+            echo "saved=false" >> $GITHUB_OUTPUT
             exit 0
           fi
           echo "$JSON" | python add_post.py
+          echo "saved=true" >> $GITHUB_OUTPUT
       - name: Commit & push
+        if: steps.generate.outputs.saved == 'true'
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add posts/
-          if git diff --staged --quiet; then
-            echo "no changes"
-          else
-            git commit -m "auto: random blog post"
-            git push
-          fi
+          git commit -m "auto: blog post from ${{ steps.generate.outputs.channel }}"
+          git push
