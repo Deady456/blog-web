@@ -1,0 +1,12 @@
+{
+  "video_id": "dQw4w9WgXcQ",
+  "title": "Test Artikel Manual v3",
+  "topic": "Testing groq api from github actions",
+  "channel": "konten3",
+  "ts": "20260709_101845",
+  "article": {
+    "title": "Test Artikel Manual v3",
+    "content": "<p>Article generation failed: HTTP Error 403: Forbidden</p>"
+  },
+  "slug": "test-artikel-manual-v3"
+}
