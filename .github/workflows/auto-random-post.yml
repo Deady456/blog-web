@@ -1,0 +1,44 @@
+name: Auto Random Blog Post
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Pick random channel & generate post
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          CHANNELS=(konten-1 konten-2 konten3 konten4 konten5 konten6 rak_anime)
+          CH=${CHANNELS[$RANDOM % ${#CHANNELS[@]}]}
+          echo "Picked: $CH"
+          TS=$(date -u +"%Y%m%d_%H%M%S")
+          STATE_URL="https://raw.githubusercontent.com/Deady456/${CH}/main/state.json"
+          JSON=$(curl -sSf "$STATE_URL" 2>/dev/null | jq -c '{video_id:(.published[-1].video_id//""), title:(.published[-1].title//""), topic:(.published[-1].topic//""), channel:"'${CH}'", ts:"'${TS}'"}')
+          if [ -z "$JSON" ] || [ "$JSON" = "null" ]; then
+            echo "state.json empty, skipping"
+            exit 0
+          fi
+          echo "$JSON" | python add_post.py
+      - name: Commit & push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add posts/
+          if git diff --staged --quiet; then
+            echo "no changes"
+          else
+            git commit -m "auto: random blog post"
+            git push
+          fi
