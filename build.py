@@ -15,16 +15,16 @@ HEADER = """<!DOCTYPE html>
 <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
-<nav class="nav"><div class="container"><a href="/" class="logo">Blog</a></div></nav>
+<nav class="nav"><div class="container"><div class="nav-inner"><a href="/" class="logo"><span>//</span> blog</a><div class="nav-links"><a href="/">Beranda</a></div></div></div></nav>
 <main class="container">
 """
 
 FOOTER = """</main>
-<footer class="footer"><div class="container"><p>&copy; 2026 Blog</p></div></footer>
+<footer class="footer"><div class="container"><p>&copy; 2026 blog.kampungisekai.my.id</p></div></footer>
 </body>
 </html>"""
 
-AD_SLOT = '<div class="ad-slot"><p style="text-align:center;padding:20px;background:#f5f5f5;border:1px dashed #ccc;">[Adsterra Ad]</p></div>'
+AD_SLOT = '<div class="ad-slot"><p>[Adsterra Banner]</p></div>'
 
 
 def load_posts():
@@ -45,19 +45,20 @@ def build_index(posts):
         ch = p.get("channel", "")
         excerpt = a.get("content", "")[:150]
         excerpt_clean = excerpt.replace("<p>", "").replace("</p>", " ").replace("<br>", " ").strip()
-        thumb = f'<img src="https://img.youtube.com/vi/{vid}/mqdefault.jpg" alt="{title}">' if vid else ""
+        badge = '<span class="play-badge">▶ YouTube</span>' if vid else ""
+        thumb_html = f'<div class="post-thumb"><img src="https://img.youtube.com/vi/{vid}/mqdefault.jpg" alt="{title}" loading="lazy">{badge}</div>' if vid else ""
         cards += f"""
 <article class="post-card">
-  {('<div class="post-thumb">' + thumb + '</div>') if thumb else ''}
+  {thumb_html}
   <div class="post-body">
     <h2><a href="/post/{slug}.html">{title}</a></h2>
-    <p class="post-meta">{ts} &middot; {ch}</p>
+    <p class="post-meta"><span class="channel">{ch}</span> {ts}</p>
     <p class="post-excerpt">{excerpt_clean[:200]}...</p>
   </div>
 </article>"""
 
     html = HEADER.format(title="Blog - Artikel & Video")
-    html += "<h1>Artikel & Video Terbaru</h1><div class=\"post-grid\">" + cards + "</div>"
+    html += '<h1>Artikel & <span>Video</span> Terbaru</h1><div class="post-grid">' + cards + "</div>"
     html += FOOTER
     (OUT_DIR / "index.html").write_text(html, encoding="utf-8")
     print(f"  index.html ({len(posts)} posts)")
@@ -78,13 +79,13 @@ def build_post(p):
     html += f"""
 <article class="post-full">
   <h1>{title}</h1>
-  <p class="post-meta">{ts} &middot; {ch}</p>
+  <p class="post-meta"><span class="channel">{ch}</span> {ts}</p>
   {embed}
   {AD_SLOT}
   <div class="post-content">{content}</div>
   {AD_SLOT}
 </article>
-<a href="/" class="back-link">&larr; Back to articles</a>"""
+<a href="/" class="back-link">&larr; Kembali ke artikel</a>"""
     html += FOOTER
     (OUT_DIR / "post" / f"{slug}.html").write_text(html, encoding="utf-8")
     print(f"  post/{slug}.html")
