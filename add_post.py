@@ -20,6 +20,7 @@ def call_llm(prompt: str) -> str:
         headers={
             "Authorization": f"Bearer {GROQ_API_KEY}",
             "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0",
         },
     )
     return json.loads(urllib.request.urlopen(req, timeout=60).read())["choices"][0]["message"]["content"]
@@ -41,8 +42,7 @@ def expand_article(data: dict) -> dict:
     try:
         return json.loads(call_llm(prompt))
     except Exception as e:
-        print(f"GROQ ERROR: {e}", file=sys.stderr)
-        return {"title": title, "content": f"<p>Article generation failed: {e}</p>"}
+        return {"title": title, "content": "<p>Article generation failed.</p>"}
 
 
 def slugify(text: str) -> str:

@@ -1,0 +1,12 @@
+{
+  "video_id": "test",
+  "title": "Test Local",
+  "topic": "Testing add_post.py locally",
+  "channel": "konten3",
+  "ts": "20260709_000000",
+  "article": {
+    "title": "Test Local",
+    "content": "<p>Article generation failed: HTTP Error 403: Forbidden</p>"
+  },
+  "slug": "test-local"
+}
